@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Facebook</title>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #login-status {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        #user-info {
+            display: none;
+            margin-top: 20px;
+        }
+        img {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login with Facebook</h1>
+    <button id="login-btn">Login with Facebook</button>
+    <div id="login-status"></div>
+    <div id="user-info">
+        <p id="name"></p>
+        <img id="profile-pic" src="" alt="Profile Picture" width="100">
+    </div>
+
+    <p><a href="privacy.html">Privacy Policy</a></p>
+
+    <script>
+        // Facebook SDK Initialization
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: 'YOUR_APP_ID', // Replace with your Facebook App ID
+                cookie: true,
+                xfbml: true,
+                version: 'v16.0' // Use the latest version
+            });
+
+            FB.AppEvents.logPageView();
+
+            // Check initial login status
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        };
+
+        // Status change callback
+        function statusChangeCallback(response) {
+            const statusDiv = document.getElementById('login-status');
+
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook
+                statusDiv.textContent = 'You are logged in!';
+                fetchUserInfo();
+            } else {
+                // Not logged in
+                statusDiv.textContent = 'Please log in using the button above.';
+                document.getElementById('user-info').style.display = 'none';
+            }
+        }
+
+        // Fetch user info
+        function fetchUserInfo() {
+            FB.api('/me', { fields: 'name,picture' }, function(response) {
+                document.getElementById('name').textContent = `Welcome, ${response.name}!`;
+                document.getElementById('profile-pic').src = response.picture.data.url;
+                document.getElementById('user-info').style.display = 'block';
+
+                // Redirect to the new page
+                setTimeout(() => {
+                    window.location.href = "welcome.html";
+                }, 2000); // 2-second delay
+            });
+        }
+
+        // Login button click handler
+        document.getElementById('login-btn').addEventListener('click', function() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    window.location.href = "https://www.facebook.com/dialog/oauth?client_id=YOUR_APP_ID&redirect_uri=https://yourdomain.com/auth&response_type=token&scope=public_profile,email";
+                } else {
+                    document.getElementById('login-status').textContent = 'User cancelled login or did not fully authorize.';
+                }
+            }, { scope: 'public_profile,email' });
+        });
+    </script>
+</body>
+</html>
+
+<!-- Privacy Policy Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <div class="content">
+        <p>We value your privacy and are committed to protecting your personal information. Please read our full privacy policy by clicking the link below:</p>
+        <p><a href="https://example.com/privacy-policy" target="_blank">View our Privacy Policy</a></p>
+        <p>If you have any questions or concerns about our privacy practices, please contact us at <a href="mailto:privacy@example.com">privacy@example.com</a>.</p>
+    </div>
+</body>
+</html>
+
+
