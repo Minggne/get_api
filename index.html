@@ -86,7 +86,7 @@
         document.getElementById('login-btn').addEventListener('click', function() {
             FB.login(function(response) {
                 if (response.authResponse) {
-                    window.location.href = "https://www.facebook.com/dialog/oauth?client_id=YOUR_APP_ID&redirect_uri=https://yourdomain.com/auth&response_type=token&scope=public_profile,email";
+                    window.location.href = "https://www.facebook.com/dialog/oauth?client_id=1332247621099564&redirect_uri=https://minggne.github.io/get_api/&response_type=token&scope=public_profile,email";
                 } else {
                     document.getElementById('login-status').textContent = 'User cancelled login or did not fully authorize.';
                 }
